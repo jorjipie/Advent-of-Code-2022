@@ -18,19 +18,26 @@ input = fs
         .map(charToInt)
     );
 
-let score = 1;
+let score = 1, result = 0;
+
 
 for (let i = 0; i < input.length; i++) {
+
     //shape
     score += input[i][1];
 
-    //score: draw
-    if (input[i][1] === input[i][0]) { score += 3; }
-
-    //score: win
-    else if (input[i][1] - input[i][0] === 1
-        || input[i][1] - input[i][0] === -2)
-        { score += 6; }
+    //break even or win
+    switch (input[i][1] - input[i][0]) {
+        case 0:
+            score += 3;
+            break;
+        case 1:
+            score += 6;
+            break;
+        case -2:
+            score += 6;
+            break;
+    }
 }
 
 console.log(score);
