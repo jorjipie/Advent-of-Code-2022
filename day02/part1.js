@@ -18,7 +18,7 @@ input = fs
         .map(charToInt)
     );
 
-let score = 1, result = 0;
+let score = 1;
 
 
 for (let i = 0; i < input.length; i++) {
