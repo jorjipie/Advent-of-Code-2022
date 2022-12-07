@@ -1,8 +1,5 @@
 // Advent of Code 2022 https://adventofcode.com/2022/day/7#part2
-// Find sum of all directories with up to 100000
-
-// I'm not thrilled that this is made of massive for loops of
-// doom, death, and destruction, but it gets the job done.
+//find the size of the smallest directory that can be deleted in order to make space for a software update.
 
 let arr = require('fs')
     .readFileSync('./input.txt')
@@ -17,7 +14,7 @@ const newDirectory = (path, size, type) => ({
     type
 });
 
-let directories = [], currentPath = [], currentPathStr = '', size = 0;
+let directories = [], currentPath = [], currentPathStr = '';
 for (let i = 0; i < arr.length; i++) {
     if (arr[i][0] === '$') { 
         if (arr[i].split(' ')[1] == 'cd') { 
@@ -48,16 +45,17 @@ for (let i = 0; i < arr.length; i++) {
             directories.push(newDirectory(currentPathStr, 0, 'dir'));
         }
         currentPath.pop();
+        currentPathStr = DirArrToStr(currentPath);
     } 
     else {
-        //add file to array.
-        size = parseInt(arr[i].split(' ')[0], 10);
+        let size = parseInt(arr[i].split(' ')[0], 10);
         currentPath.push(arr[i].split(' ')[1]);
         currentPathStr = DirArrToStr(currentPath);
         if (!directories.some(e => e.path === currentPathStr)) {
             directories.push(newDirectory(currentPathStr, size, 'file'));
         }
         currentPath.pop();
+        currentPathStr = DirArrToStr(currentPath);
     }
 }
 
@@ -74,6 +72,7 @@ for (let i = 0; i < directories.length; i++) {
     if (parentDirIndex !== -1) { directories[parentDirIndex].size += directories[i].size; } 
 }
 
-directories = directories.filter(e => e.type === 'dir' && e.size < 100001).map(e => e.size);
+directories = directories.filter(e => e.type === 'dir').map(e => e.size);
+AddlSpaceNeeded = 30000000 - (70000000 - Math.max(...directories));
 
-console.log(directories.reduce((sum, e) => sum + e, 0));
+console.log(Math.min(...directories.filter(e => e > AddlSpaceNeeded)));
